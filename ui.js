@@ -1,11 +1,11 @@
 const elMoney = document.getElementById("money");
-const elWeed = document.getElementById("weed");
-const elPlants = document.getElementById("plants");
-const elPlantCost = document.getElementById("plantcost");
-const elBuyButton = document.getElementById("buybutton");
-const elWeedSellButton = document.getElementById("weedsellbutton");
-const elWeedAutoSell = document.getElementById("weedautosell");
-const elPlantAutoBuy = document.getElementById("plantautobuy");
+const elbasic_weed = document.getElementById("basic_weed");
+const elbasic_Plants = document.getElementById("basic_plants");
+const elbasic_PlantCost = document.getElementById("basic_plantcost");
+const elbasic_BuyButton = document.getElementById("basic_buybutton");
+const elbasic_weedSellButton = document.getElementById("basic_weedsellbutton");
+const elbasic_weedAutoSell = document.getElementById("basic_weedautosell");
+const elbasic_PlantAutoBuy = document.getElementById("basic_plantautobuy");
 
 let lastTimeMs = Date.now();
 
@@ -13,30 +13,30 @@ function updateMoney() {
     elMoney.textContent = Math.floor(game.money);
 }
 
-function updateWeed() {
-    elPlants.textContent = game.weed.plants;
-    elPlantCost.textContent = game.weed.plantcost;
-    elWeed.textContent = Math.floor(game.weed.weed);
+function updatebasic_weed() {
+    elbasic_Plants.textContent = game.weed.basic_weed.basic_plants;
+    elbasic_PlantCost.textContent = game.weed.basic_weed.basic_plantcost;
+    elbasic_weed.textContent = Math.floor(game.weed.basic_weed.basic_weed);
 }
 
 function updateUI() {
     updateMoney();
-    updateWeed();
+    updatebasic_weed();
 }
 
-elBuyButton.onclick = () => {
-    buyplant();
+elbasic_BuyButton.onclick = () => {
+    buybasic_plant();
     updateUI();
 };
 
-elWeedSellButton.onclick = () => {
-    sellweed();
+elbasic_weedSellButton.onclick = () => {
+    sellbasic_weed();
     updateUI();
 }
 
 function auto() {
-    if (elWeedAutoSell.checked) sellmaxweed();
-    if (elPlantAutoBuy.checked) buymaxplants();
+    if (elbasic_weedAutoSell.checked) sellmaxbasic_weed();
+    if (elbasic_PlantAutoBuy.checked) buymaxbasic_plants();
 }
 
 function loop() {
