@@ -4,7 +4,7 @@ const basic_weed = {
     basic_weed: 0,
     basic_weed_price: 1,
     basic_plantcost: 10,
-    basic_maxbasic_plants: 1000,
+    maxbasic_plants: 1000,
 }
 
 const weed = {
@@ -22,7 +22,7 @@ function basic_weed_income() {
 
 function buybasic_plant() {
     if (game.money < game.weed.basic_weed.basic_plantcost) return;
-    if (game.weed.basic_weed.basic_plants >= game.weed.basic_weed.basic_maxbasic_plants) return;
+    if (game.weed.basic_weed.basic_plants >= game.weed.basic_weed.maxbasic_plants) return;
     game.money -= game.weed.basic_weed.basic_plantcost;
     game.weed.basic_weed.basic_plants += 1;
     return;
@@ -30,8 +30,8 @@ function buybasic_plant() {
 
 function buymaxbasic_plants() {
     if (game.money < game.weed.basic_weed.basic_plantcost) return;
-    if (game.weed.basic_weed.basic_plants >= game.weed.basic_weed.basic_maxbasic_plants) return;
-    const plantcount = Math.min((Math.floor(game.money / game.weed.basic_weed.basic_plantcost)), (game.weed.basic_weed.basic_maxbasic_plants - game.weed.basic_weed.basic_plants));
+    if (game.weed.basic_weed.basic_plants >= game.weed.basic_weed.maxbasic_plants) return;
+    const plantcount = Math.min((Math.floor(game.money / game.weed.basic_weed.basic_plantcost)), (game.weed.basic_weed.maxbasic_plants - game.weed.basic_weed.basic_plants));
     game.weed.basic_weed.basic_plants += plantcount;
     game.money -= plantcount * game.weed.basic_weed.basic_plantcost;
     return;
