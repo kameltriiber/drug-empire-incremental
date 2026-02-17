@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>placeholder</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="placeholder">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="styles.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+
+    </head>
+    <body>
+        <div class="bodydiv">
+            <h1>Weed Empire Incremental</h1>
+            <div><span class="label">Money: </span><span id="money">10</span></div>
+            <div><span class="label">Weed: </span><span id="weed">0</span></div>
+            <div><span class="label">Plants: </span><span id="plants">0</span></div>
+            <div><span class="label">Plant cost: </span><span id="plantcost">10</span></div>
+
+            <button id="buybutton">Buy Plant (10 Money)</button>
+            <input type="checkbox" id="plantautobuy">Autobuy Plants</input>
+
+            <button id="weedsellbutton">Sell Weed (1 Money)</button>
+            <input type="checkbox" id="weedautosell">Autosell Weed</input>
+        </div>
+        <script src="game.js"></script>
+        <script src="ui.js"></script>
+    </body>
+</html>
