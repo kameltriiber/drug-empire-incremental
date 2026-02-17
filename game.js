@@ -2,7 +2,7 @@ const weed = {
     plants: 0,
     weedincome: 0,
     weed: 0,
-    weedprice: 10,
+    weedprice: 5,
     plantcost: 10,
 }
 
