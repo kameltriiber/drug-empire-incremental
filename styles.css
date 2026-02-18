@@ -97,7 +97,7 @@
 }
 
 .pictureframe {
-    background-color: lightgrey;
+    background-color: var(--bg-dark);
     width: 300px;
     height: 300px;
     margin-bottom: 15px;
