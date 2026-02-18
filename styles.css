@@ -2,9 +2,41 @@
     font-family: "Noto Sans", sans-serif;
 }
 
+.app {
+    border: 1px solid red;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.game_title {
+    border: 1px solid blue;
+    font-size: 60px;
+    font-weight: 700;
+    font-kerning: normal;
+    width: fit-content;
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+.weed_div {
+    width: 80vw;
+    max-width: 1050px;
+    border: 1px solid black;
+    display: flex;
+    padding: 10px;
+    justify-content: space-between;
+}
+
 .card {
     border: 1px solid black;
-    width: fit-content;
+    width: 300px;
     padding: 20px;
-    margin-top: 10px;
+}
+
+.pictureframe {
+    background-color: pink;
+    width: 300px;
+    height: 300px;
+    margin-bottom: 20px;
 }
