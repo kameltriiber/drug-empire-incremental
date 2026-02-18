@@ -75,20 +75,33 @@ function add_weed_type_toscreen(type) {
     const plant_quantity_row = document.createElement("div");
     const weed_price_row = document.createElement("div");
 
-    // buy button
+    // buttons
     const buy_button = document.createElement("button");
     buy_button.onclick = function() {buy_plant(type)};
-
-    // sell buttons
-    const sell_button_div = document.createElement("div");
-    sell_button_div.classList.add("sell_buttons");
+    const buy_button_line = document.createElement("div");
+    buy_button_line.textContent = "Buy Plant: ";
 
     const sell_button = document.createElement("button");
     sell_button.onclick = function() {sell_weed(type)};
+    const sell_button_line = document.createElement("div");
+    sell_button_line.textContent = "Sell 1 Weed: ";
+
     const sell_max_button = document.createElement("button");
     sell_max_button.onclick = function() {sell_max_weed(type)};
+    const sell_max_button_line = document.createElement("div");
+    sell_max_button_line.textContent = "Sell all Weed: ";
 
-    sell_button_div.append(sell_button, sell_max_button);
+    const buy_button_div = document.createElement("div");
+    buy_button_div.append(buy_button_line, buy_button);
+    buy_button_div.classList.add("button_div");
+
+    const sell_button_div = document.createElement("div");
+    sell_button_div.append(sell_button_line, sell_button);
+    sell_button_div.classList.add("button_div");
+
+    const sell_max_button_div = document.createElement("div");
+    sell_max_button_div.append(sell_max_button_line, sell_max_button);
+    sell_max_button_div.classList.add("button_div");
 
     name_row.textContent = weeds[type].name;
 
@@ -98,10 +111,11 @@ function add_weed_type_toscreen(type) {
     weed_quantity_row.classList.add("weed_card_content");
     plant_quantity_row.classList.add("weed_card_content");
     weed_price_row.classList.add("weed_card_content");
-    buy_button.classList.add("weed_card_content");
+    buy_button_div.classList.add("weed_card_content");
     sell_button_div.classList.add("weed_card_content");
+    sell_max_button_div.classList.add("weed_card_content");
 
-    card.append(pictureframe, name_row, weed_quantity_row, plant_quantity_row, weed_price_row, buy_button, sell_button_div);
+    card.append(pictureframe, name_row, weed_quantity_row, plant_quantity_row, weed_price_row, buy_button_div, sell_button_div, sell_max_button_div);
     weed_div.append(card);
 
     weed_cards[type] = {
@@ -130,11 +144,11 @@ function update_weed_cards() {
         weed_cards[type].weed_quantity_row.textContent = `Weed owned: ${format_number(weed_owned)}`;
         weed_cards[type].plant_quantity_row.textContent = `Plants owned: ${format_number(plant_owned)}`;
         weed_cards[type].weed_price_row.textContent = `Weed price: ${format_number(price_each)}`;
-        weed_cards[type].buy_button.textContent = `Buy Plant for $${format_number(plant_cost)}`;
+        weed_cards[type].buy_button.textContent = `$${format_number(plant_cost)}`;
         weed_cards[type].sell_button.textContent =
-            `Sell ${format_number(sell_quantity)} for $${format_number(price_each * sell_quantity)}`;
+            `$${format_number(price_each * sell_quantity)}`;
         weed_cards[type].sell_max_button.textContent =
-            `Sell all for $${format_number(price_each * weed_owned)}`;
+            `$${format_number(price_each * weed_owned)}`;
     }
 }
 
