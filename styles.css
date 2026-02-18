@@ -18,12 +18,17 @@
 
 .app {
     background-color: var(--bg-dark);
-    width: fit-content;
+    width: 90%;
+    max-width: 1070px;
     margin: 0 auto;
     padding: 20px;
     border-radius: 25px;
     border-top: solid 2px var(--bg-light);
     box-shadow: var(--shadow);
+
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
 }
 
 .game_title {
@@ -53,8 +58,7 @@
 }
 
 .weed_div {
-    width: 80vw;
-    max-width: 1050px;
+    width: 1050px;
     display: flex;
     padding: 10px;
     justify-content: space-between;
