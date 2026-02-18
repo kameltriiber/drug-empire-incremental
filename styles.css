@@ -1,16 +1,33 @@
+:root {
+    --bg-darker: hsl(0 0% 85%);
+    --bg-dark: hsl(0 0% 90%);
+    --bg: hsl(0 0% 95%);
+    --bg-light: hsl(0 0% 100%);
+    --text: hsl(0 0% 5%);
+    --text-muted: hsl(0 0% 30%);
+    --shadow: 0px 2px 2px hsla(0, 0%, 0%, 0.07), 0px 4px 4px hsla(0, 0%, 0%, 0.15);
+
+    background-color: var(--bg-darker);
+}
+
 * {
     font-family: "Noto Sans", sans-serif;
+    color: var(--text-muted);
+    font-size: 18px;
 }
 
 .app {
-    border: 1px solid red;
+    background-color: var(--bg-dark);
     width: fit-content;
     margin: 0 auto;
     padding: 20px;
+    border-radius: 25px;
+    border-top: solid 2px var(--bg-light);
+    box-shadow: var(--shadow);
 }
 
 .game_title {
-    border: 1px solid blue;
+    color: var(--text);
     font-size: 60px;
     font-weight: 700;
     font-kerning: normal;
@@ -19,24 +36,63 @@
     margin-bottom: 20px;
 }
 
+.money_display {
+    background-color: var(--bg);
+    position:fixed;
+    top: 40px;
+    right: 20px;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    width: 200px;
+    padding: 10px;
+    border-radius: 20px;
+    border-top: solid 2px var(--bg-light);
+    border-bottom: solid 2px var(--bg);
+    box-shadow: var(--shadow);
+}
+
 .weed_div {
     width: 80vw;
     max-width: 1050px;
-    border: 1px solid black;
     display: flex;
     padding: 10px;
     justify-content: space-between;
 }
 
 .card {
-    border: 1px solid black;
+    background-color: var(--bg);
     width: 300px;
     padding: 20px;
+    border-radius: 20px;
+    border-top: solid 2px var(--bg-light);
+    box-shadow: var(--shadow);
+}
+
+.weed_card_content {
+    margin-left: 7px;
+}
+
+.weed_name_row {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 5px;
 }
 
 .pictureframe {
     background-color: pink;
     width: 300px;
     height: 300px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+}
+
+button {
+    background-color: var(--bg-light);
+    font-weight: 600;
+    border: 0;
+    padding: 10px;
+    margin: 4px 4px 4px 0;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
 }

@@ -7,6 +7,8 @@ title.classList.add("game_title");
 title.textContent = "Drug Empire Incremental";
 
 const money_display = document.createElement("div");
+money_display.classList.add("money_display");
+
 const weed_div = document.createElement("div");
 weed_div.classList.add("weed_div");
 
@@ -68,6 +70,7 @@ function add_weed_type_toscreen(type) {
     pictureframe.classList.add("pictureframe");
 
     const name_row = document.createElement("div");
+    name_row.classList.add("weed_name_row");
     const weed_quantity_row = document.createElement("div");
     const plant_quantity_row = document.createElement("div");
     const weed_price_row = document.createElement("div");
@@ -89,6 +92,14 @@ function add_weed_type_toscreen(type) {
 
     name_row.textContent = weeds[type].name;
 
+
+    // for css edits
+    name_row.classList.add("weed_card_content");
+    weed_quantity_row.classList.add("weed_card_content");
+    plant_quantity_row.classList.add("weed_card_content");
+    weed_price_row.classList.add("weed_card_content");
+    buy_button.classList.add("weed_card_content");
+    sell_button_div.classList.add("weed_card_content");
 
     card.append(pictureframe, name_row, weed_quantity_row, plant_quantity_row, weed_price_row, buy_button, sell_button_div);
     weed_div.append(card);
@@ -119,17 +130,17 @@ function update_weed_cards() {
         weed_cards[type].weed_quantity_row.textContent = `Weed owned: ${format_number(weed_owned)}`;
         weed_cards[type].plant_quantity_row.textContent = `Plants owned: ${format_number(plant_owned)}`;
         weed_cards[type].weed_price_row.textContent = `Weed price: ${format_number(price_each)}`;
-        weed_cards[type].buy_button.textContent = `Buy Plant for ${format_number(plant_cost)}`;
+        weed_cards[type].buy_button.textContent = `Buy Plant for $${format_number(plant_cost)}`;
         weed_cards[type].sell_button.textContent =
-            `Sell ${format_number(sell_quantity)} Weed for ${format_number(price_each * sell_quantity)}`;
+            `Sell ${format_number(sell_quantity)} for $${format_number(price_each * sell_quantity)}`;
         weed_cards[type].sell_max_button.textContent =
-            `Sell ${format_number(weed_owned)} Weed for ${format_number(price_each * weed_owned)}`;
+            `Sell all for $${format_number(price_each * weed_owned)}`;
     }
 }
 
 // render screen text
 function update_screen() {
-    money_display.textContent = `Money: ${format_number(game.money)}`;
+    money_display.textContent = `Money: $${format_number(game.money)}`;
 
     update_weed_cards();
     
