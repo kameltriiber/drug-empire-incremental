@@ -1,10 +1,14 @@
 :root {
-    --bg-darker: hsl(0 0% 85%);
-    --bg-dark: hsl(0 0% 90%);
-    --bg: hsl(0 0% 95%);
-    --bg-light: hsl(0 0% 100%);
-    --text: hsl(0 0% 5%);
-    --text-muted: hsl(0 0% 30%);
+    --color-selector: 110;
+    --saturation-selector: 0%;
+    --test: hsl(113, 57%, 91%);
+
+    --bg-darker: hsl(var(--color-selector) var(--saturation-selector) 85%);
+    --bg-dark: hsl(var(--color-selector) var(--saturation-selector) 90%);
+    --bg: hsl(var(--color-selector) var(--saturation-selector) 95%);
+    --bg-light: hsl(var(--color-selector) var(--saturation-selector) 100%);
+    --text: hsl(var(--color-selector) var(--saturation-selector) 5%);
+    --text-muted: hsl(var(--color-selector) var(--saturation-selector) 30%);
     --shadow: 0px 2px 2px hsla(0, 0%, 0%, 0.07), 0px 4px 4px hsla(0, 0%, 0%, 0.15);
 
     background-color: var(--bg-darker);
@@ -84,7 +88,7 @@
 }
 
 .pictureframe {
-    background-color: pink;
+    background-color: var(--bg-darker);
     width: 300px;
     height: 300px;
     margin-bottom: 15px;
