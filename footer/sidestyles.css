@@ -1,0 +1,62 @@
+:root {
+    --bg-dark: hsl(0 0% 88%);
+    --bg: hsl(0 0% 94%);
+    --bg-light: hsl(0 0% 100%);
+
+    --text: hsl(0 0 10%);
+    --text-muted: hsl(0 0 30%);
+
+    --shadow: 0px 2px 2px hsla(0, 0%, 0%, 0.07), 0px 4px 4px hsla(0, 0%, 0%, 0.15);
+}
+
+* {
+    font-family: "Noto Sans", sans-serif;
+}
+
+body {
+    background-color: var(--bg-dark);
+}
+
+.bodydiv {
+    background-color: var(--bg);
+    width: 70%;
+    max-width: 1020px;
+    border-radius: 25px;
+    padding: 40px;
+    display: block;
+    margin: 30px auto;
+
+    box-shadow: var(--shadow);
+    border-top: solid 2px var(--bg-light);
+    border-bottom: solid 2px var(--bg);
+}
+
+h1, h2, h3 {
+    color: var(--text);
+}
+
+h1 {
+    font-size: 50px;
+    font-weight: 700;
+    margin-bottom: 0.3em;
+    margin-top: 0;
+}
+
+h2 {
+    font-size: 26px;
+    margin-bottom: 0.5em;
+    font-weight: 600;
+}
+
+h3 {
+    font-size: 20px;
+    margin-bottom: 0.3em;
+    font-weight: 600;
+}
+
+p {
+    color: var(--text-muted);
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+}
