@@ -15,8 +15,6 @@ weed_div.classList.add("weed_div");
 app.append(title, money_display, weed_div);
 
 
-
-
 // number formatter function
 function format_number(value) {
     if (!Number.isFinite(value)) return "∞";
@@ -65,15 +63,18 @@ function add_weed_type_toscreen(type) {
 
     const card = document.createElement("div");
     card.classList.add("card");
+
     // picture frame
     const pictureframe = document.createElement("div");
     pictureframe.classList.add("pictureframe");
 
+    // text content
     const name_row = document.createElement("div");
     name_row.classList.add("weed_name_row");
     const weed_quantity_row = document.createElement("div");
     const plant_quantity_row = document.createElement("div");
     const weed_price_row = document.createElement("div");
+    name_row.textContent = weeds[type].name;
 
     // buttons
     const buy_button = document.createElement("button");
@@ -91,6 +92,7 @@ function add_weed_type_toscreen(type) {
     const sell_max_button_line = document.createElement("div");
     sell_max_button_line.textContent = "Sell all Weed: ";
 
+    // divs for button layout
     const buy_button_div = document.createElement("div");
     buy_button_div.append(buy_button_line, buy_button);
     buy_button_div.classList.add("button_div");
@@ -103,10 +105,7 @@ function add_weed_type_toscreen(type) {
     sell_max_button_div.append(sell_max_button_line, sell_max_button);
     sell_max_button_div.classList.add("button_div");
 
-    name_row.textContent = weeds[type].name;
-
-
-    // for css edits
+    // added classes for css edits
     name_row.classList.add("weed_card_content");
     weed_quantity_row.classList.add("weed_card_content");
     plant_quantity_row.classList.add("weed_card_content");
@@ -115,9 +114,11 @@ function add_weed_type_toscreen(type) {
     sell_button_div.classList.add("weed_card_content");
     sell_max_button_div.classList.add("weed_card_content");
 
+    // add everything to the card div
     card.append(pictureframe, name_row, weed_quantity_row, plant_quantity_row, weed_price_row, buy_button_div, sell_button_div, sell_max_button_div);
     weed_div.append(card);
 
+    // "saving" data in the cards
     weed_cards[type] = {
         pictureframe,
         weed_quantity_row,
@@ -129,6 +130,7 @@ function add_weed_type_toscreen(type) {
     };
 }
 
+// render all cards to screen / create all card objects
 for (const type in weeds) {
     add_weed_type_toscreen(type);
 }
@@ -157,5 +159,4 @@ function update_screen() {
     money_display.textContent = `Money: $${format_number(game.money)}`;
 
     update_weed_cards();
-    
 }

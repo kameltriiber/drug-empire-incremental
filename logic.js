@@ -47,8 +47,6 @@ function weed_income(type, seconds) {
     return weeds[type].income * game.plants_owned[type] * seconds;
 }
 
-
-
 function tick(dt) {
     for (const type in weeds) {
         game.weed_owned[type] += weed_income(type, dt);
