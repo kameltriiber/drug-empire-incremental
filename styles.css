@@ -13,6 +13,24 @@
     --shadow: 0px 2px 2px hsla(0, 0%, 0%, 0.07), 0px 4px 4px hsla(0, 0%, 0%, 0.15);
 
     background-color: var(--bg-darker);
+
+    --ad-side: 0px;
+    padding: 0;
+}
+
+@media (min-width: 1750px) {
+    :root { --ad-side: 300px; }
+}
+
+@media (min-width: 1470px) and (max-width: 1749px) {
+    :root { --ad-side: 160px; }
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    padding-top: 10px;
+    
 }
 
 * {
@@ -21,16 +39,32 @@
     font-size: 18px;
 }
 
+.page {
+    display: grid;
+    grid-template-columns: var(--ad-side) minmax(0, 1fr) var(--ad-side);
+    align-items: start;
+}
+
+.ad {
+    min-height: 600px;
+}
+
+.center {
+    min-width: 0;
+}
+
 .app {
     background-color: var(--bg-dark);
-    width: 90%;
+    width: 100%;
     max-width: 1070px;
+    min-height: 1500px;
     margin: 0 auto;
     padding: 20px;
     border-radius: 25px;
     border-top: solid 2px var(--bg-light);
     box-shadow: var(--shadow);
 
+    position: relative;
     overflow-x: auto;
     overflow-y: visible;
     -webkit-overflow-scrolling: touch;
@@ -54,10 +88,10 @@
 }
 
 .money_display {
-    background-color: var(--bg);
-    position:fixed;
-    top: 40px;
-    right: 20px;
+    background-color: var(--bg-light);
+    position: fixed;
+    top: 120px;
+    right: calc(50vw - 1070px/2);
     font-size: 22px;
     font-weight: 700;
     text-align: center;
@@ -66,7 +100,10 @@
     border-radius: 20px;
     border-top: solid 2px var(--bg-light);
     border-bottom: solid 2px var(--bg);
-    box-shadow: 0px 3px 3px hsla(0, 0%, 0%, 0.07), 0px 6px 6px hsla(0, 0%, 0%, 0.15);;
+    box-shadow: 
+        0px 3px 3px hsla(0, 0%, 0%, 0.07), 
+        0px 6px 6px hsla(0, 0%, 0%, 0.15);
+    z-index: 999; 
 }
 
 .weed_div {
