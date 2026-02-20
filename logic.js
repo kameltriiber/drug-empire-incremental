@@ -24,7 +24,7 @@ const game = {
     },
     market: {
         // keep this small + serializable (safe for future saving)
-        history_limit: 1000,
+        history_limit: 500,
         tick_interval: 1,     // seconds between price points
         tick_accum: 0,        // internal accumulator for timing
 

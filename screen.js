@@ -248,9 +248,31 @@ function create_price_chart(type, container_id) {
     const chart = LightweightCharts.createChart(container, {
         width: 655,
         height: 420,
+        localization: {
+            // Force local-time label rendering for crosshair/time values.
+            timeFormatter: (time) => {
+                const d = new Date(Number(time) * 1000);
+                return d.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: false,
+                });
+            },
+        },
         timeScale: {
             timeVisible: true,
             secondsVisible: true,
+            // Force local-time formatting on axis tick labels.
+            tickMarkFormatter: (time) => {
+                const d = new Date(Number(time) * 1000);
+                return d.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: false,
+                });
+            },
         },
         layout: {
             background: {

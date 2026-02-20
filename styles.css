@@ -115,7 +115,7 @@ html, body {
     padding: 10px;
     border-radius: 20px;
     border-top: solid 2px var(--bg-light);
-    border-bottom: solid 2px var(--bg);
+    border-bottom: solid 2px var(--bg-light);
     box-shadow: 
         0px 3px 3px hsla(0, 0%, 0%, 0.07), 
         0px 6px 6px hsla(0, 0%, 0%, 0.15);

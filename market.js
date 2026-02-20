@@ -127,10 +127,10 @@ function market_tick(dt) {
     while (game.market.tick_accum >= interval) {
         game.market.tick_accum -= interval;
 
-        const t = now_sec();
+        // const t = now_sec();
         for (const type in weeds) {
             const next = market_next_price(type);
-            market_record_price(type, next, t);
+            market_record_price(type, next);
         }
     }
 }
