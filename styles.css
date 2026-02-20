@@ -19,6 +19,15 @@
     padding: 0;
 }
 
+/* style boilerplates */
+.level2 {
+    background-color: var(--bg);
+    padding: 20px;
+    border-radius: 20px;
+    border-top: solid 2px var(--bg-light);
+    border-bottom: solid 2px var(--bg);
+    box-shadow: var(--shadow);
+}
 
 /* grid layout for screens and eventually ads */
 
@@ -113,8 +122,9 @@ html, body {
     z-index: 999; 
 }
 
-.weed_div {
+.weed_div, .market_div {
     width: 1050px;
+    min-height: 10px;
     display: flex;
     padding: 10px;
     justify-content: space-between;
@@ -133,7 +143,7 @@ html, body {
     margin-left: 7px;
 }
 
-.weed_name_row {
+.weed_name_row, .market_weed_counter {
     font-size: 24px;
     font-weight: 600;
     color: var(--text-semi-muted);
@@ -185,6 +195,66 @@ button:active {
     box-shadow:
         0px 1px 1px hsl(0 0% 0% / 0.10),
         0px 2px 3px hsl(0 0% 0% / 0.18);
+}
+
+/* market */
+.market_div {
+    width: 1050px;
+    padding: 10px;
+    display: block;
+}
+
+.market_weed_counter_div {
+    width: 1050px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0;
+}
+
+.market_weed_counter {
+    width: 300px;
+    text-align: center;
+    margin: 0;
+}
+
+/* market chart */
+.market_chart_div {
+    width: 1050px;
+    min-height: 10px;
+    margin-top: 20px;
+}
+
+.market_chart_package {
+    width: 1050px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.market_graph_chart_div {
+    width: 655px;
+}
+
+.market_graph_control_div {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.market_graph_chart {
+    width: 655px;
+    height: 420px;
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    line-height: 0;
+}
+
+
+.hidden {
+    display: none !important;
 }
 
 

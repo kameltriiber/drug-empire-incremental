@@ -11,5 +11,9 @@ function loop() {
     requestAnimationFrame(loop);
 }
 
+build_base_ui();
+
+//show_market();
+
 update_screen();
 loop();
