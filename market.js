@@ -42,9 +42,24 @@ function market_record_price(type, price, t = now_sec()) {
     market_init_if_needed();
 
     const entry = game.market.prices[type];
-    entry.last = price;
+    const safe_time = Number.isFinite(t) ? Math.floor(t) : now_sec();
+    const safe_price = Number.isFinite(price) && price > 0
+        ? Math.round(price * 100) / 100
+        : market_base_price(type);
 
-    entry.history.push({ time: t, value: price });
+    entry.last = safe_price;
+
+    const hist = entry.history;
+    const last = hist[hist.length - 1];
+    if (last && last.time === safe_time) {
+        // Same second: overwrite to avoid duplicate timestamps in setData().
+        last.value = safe_price;
+    } else if (last && last.time > safe_time) {
+        // Keep time strictly increasing even if called with stale timestamps.
+        hist.push({ time: last.time + 1, value: safe_price });
+    } else {
+        hist.push({ time: safe_time, value: safe_price });
+    }
 
     const limit = game.market.history_limit || 1000;
     if (entry.history.length > limit) {
@@ -52,10 +67,10 @@ function market_record_price(type, price, t = now_sec()) {
     }
 
     // keep weeds[type].price as the "current displayed price"
-    weeds[type].price = price;
+    // weeds[type].price = safe_price;
 
-    // If chart exists, update it (UI is not saved)
-    if (window.push_price_point) push_price_point(type, price, t);
+    // If chart exists, sync it from capped saved history.
+    if (window.push_price_point) push_price_point(type);
 }
 
 // Simple starter algorithm: mean-reverting random walk per weed.

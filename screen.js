@@ -243,6 +243,8 @@ function add_market_chart(type) {
 
 function create_price_chart(type, container_id) {
     const container = document.getElementById(container_id);
+    if (!container) return;
+
     const chart = LightweightCharts.createChart(container, {
         width: 655,
         height: 420,
@@ -263,7 +265,8 @@ function create_price_chart(type, container_id) {
     // hydrate from saved history if present
     if (game.market && game.market.prices && game.market.prices[type]) {
         const hist = game.market.prices[type].history;
-        if (hist && hist.length) price_series.setData(hist);
+        const safe_hist = sanitize_price_history(hist);
+        if (safe_hist.length) price_series.setData(safe_hist);
     }
 
     ui.market_charts[type] = {
@@ -272,16 +275,39 @@ function create_price_chart(type, container_id) {
     };
 }
 
-function push_price_point(type, price = null, time = null) {
+function sanitize_price_history(history) {
+    if (!Array.isArray(history)) return [];
+
+    const safe_history = [];
+    let last_time = -Infinity;
+    for (const point of history) {
+        const raw_time = Number(point?.time);
+        const raw_value = Number(point?.value);
+        if (!Number.isFinite(raw_time) || !Number.isFinite(raw_value) || raw_value <= 0) {
+            continue;
+        }
+
+        const time = Math.floor(raw_time);
+        if (time <= last_time) continue;
+
+        safe_history.push({ time, value: raw_value });
+        last_time = time;
+    }
+
+    return safe_history;
+}
+
+function push_price_point(type) {
     const chart_data = ui.market_charts[type];
     if (!chart_data) return;
 
     const market_entry = game.market?.prices?.[type];
-    const value = price ?? market_entry?.last;
-    if (typeof value !== "number") return;
+    const history = market_entry?.history;
+    const safe_history = sanitize_price_history(history);
+    if (!safe_history.length) return;
 
-    const t = time ?? Math.floor(Date.now() / 1000);
-    chart_data.price_series.update({ time: t, value });
+    // Keep the chart strictly aligned with capped saved history.
+    chart_data.price_series.setData(safe_history);
 }
 
 function show_market() {
