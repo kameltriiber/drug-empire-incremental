@@ -9,10 +9,7 @@ const ui = {
     market_chart_basic_div: null,
     market_chart_elements: {},
     market_charts: {},
-
-
-    market_chart_california_div: null,
-    market_chart_special_div: null,
+    market_charts_buttons: {},
 
 
     leverage_div: null,
@@ -64,9 +61,9 @@ function build_base_ui() {
 
     ui.market_weed_counter = {};
     
-    for (const type in weeds) {
-        add_counter_to_market(type);
-    }
+    // for (const type in weeds) {
+    //     add_counter_to_market(type);
+    // }
 
     // market chart basic
     ui.market_chart_basic_div = document.createElement("div");
@@ -117,6 +114,30 @@ function format_number(value) {
     }
 
     return sign + text + suffixes[tier - 1];
+}
+
+function format_market_prices(price) {
+    if (!Number.isFinite(price)) return "∞";
+
+    const sign = price < 0 ? "-" : "";
+    const abs_price = Math.abs(price);
+    const suffixes = ["", "k", "m", "b", "t", "qa", "qi", "sx", "sp", "oc", "no", "dc"];
+
+    let tier = 0;
+    if (abs_price >= 1000) {
+        tier = Math.floor(Math.log10(abs_price) / 3);
+        if (tier > suffixes.length - 1) tier = suffixes.length - 1;
+    }
+
+    let scaled = abs_price / Math.pow(10, tier * 3);
+
+    // If rounding produces 1000.0000, bump to the next suffix to keep max 3 digits before decimal.
+    if (scaled >= 999.99995 && tier < suffixes.length - 1) {
+        tier += 1;
+        scaled = abs_price / Math.pow(10, tier * 3);
+    }
+
+    return `${sign}${scaled.toFixed(4)}${suffixes[tier]}`;
 }
 
 
@@ -221,7 +242,59 @@ function add_market_chart(type) {
 
     const graph_control_div = document.createElement("div");
     graph_control_div.classList.add("market_graph_control_div");
-    graph_control_div.classList.add("level2");
+    // graph_control_div.classList.add("level2");
+
+    const row1 = document.createElement("div");
+    row1.classList.add("market_graph_control_row");
+    const counter = document.createElement("div");
+    counter.classList.add("market_weed_counter");
+    counter.classList.add("level2");
+
+    ui.market_weed_counter[type] = counter;
+    row1.append(counter);
+    graph_control_div.append(row1);
+
+    const row2 = document.createElement("div");
+    row2.classList.add("market_graph_control_row");
+    
+    const market_quantity_input = document.createElement("input");
+    market_quantity_input.classList.add("market_quantity_input");
+    market_quantity_input.type = "number";
+    market_quantity_input.min = "1";
+    market_quantity_input.value = String(market_quantity[type]);
+    market_quantity_input.onchange = function() {
+        market_quantity[type] = Math.max(1, Math.floor(Number(market_quantity_input.value)));
+    };
+
+    const market_buy_button = document.createElement("button");
+    market_buy_button.classList.add("market_button", "market_buy_button", `market_buy_button_${type}`);
+    market_buy_button.onclick = function() {market_buy_weed(type)};
+
+    row2.append(market_quantity_input, market_buy_button);
+    graph_control_div.append(row2);
+
+
+    const row3 = document.createElement("div");
+    row3.classList.add("market_graph_control_row");
+
+    const market_sell_button = document.createElement("button");
+    market_sell_button.classList.add("market_button","market_sell_button", `market_sell_button_${type}`);
+    market_sell_button.onclick = function() {market_sell_weed(type)};
+
+    const market_sell_max_button = document.createElement("button");
+    market_sell_max_button.classList.add("market_button", "market_sell_max_button", `market_sell_max_button_${type}`);
+    market_sell_max_button.onclick = function() {market_sell_weed(type, game.weed_owned[type])};
+
+    row3.append(market_sell_button, market_sell_max_button);
+    graph_control_div.append(row3);
+
+
+    ui.market_charts_buttons[type] = {
+        market_buy_button,
+        market_sell_button,
+        market_sell_max_button,
+    };
+
 
     chart_package.append(graph_chart_div);
     chart_package.append(graph_control_div);
@@ -377,6 +450,22 @@ function update_market_weed_counter() {
     }
 }
 
+function update_market_chart_buttons(type) {
+    const buttons = ui.market_charts_buttons[type];
+    if (!buttons) return;
+
+    const quantity = market_quantity[type];
+    if (buttons.market_buy_button) {
+        buttons.market_buy_button.textContent = `Buy ${format_number(quantity)} for \r\n${format_market_prices(get_weed_market_buy_price(type))}`;
+    }
+    if (buttons.market_sell_button) {
+        buttons.market_sell_button.textContent = `Sell ${format_number(quantity)} for \r\n${format_market_prices(get_weed_market_sell_price(type))}`;
+    }
+    if (buttons.market_sell_max_button) {
+        buttons.market_sell_max_button.textContent = `Sell all for \r\n${format_market_prices(get_weed_market_sell_price(type, game.weed_owned[type]))}`;
+    }
+}
+
 // render screen text
 function update_screen() {
     ui.money_display.textContent = `Money: $${format_number(game.money)}`;
@@ -384,4 +473,8 @@ function update_screen() {
     update_weed_cards();
 
     update_market_weed_counter();
+
+    update_market_chart_buttons("basic");
+    update_market_chart_buttons("california");
+    update_market_chart_buttons("special");
 }

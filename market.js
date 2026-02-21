@@ -1,6 +1,18 @@
 // market.js
 // Owns ALL market state + price algorithm. UI is optional.
 
+const volatility = {
+        basic: 0.1,
+        california: 0.05,
+        special: 0.03,
+    };
+
+const mean_revert_mult = {
+        basic: 0.02,
+        california: 0.02,
+        special: 0.02,
+    }
+
 function now_sec() {
     return Math.floor(Date.now() / 1000);
 }
@@ -79,22 +91,14 @@ function market_next_price(type) {
     const entry = game.market.prices[type];
 
     // Baselines can be your original prices (or something you evolve later)
-    const base = market_base_price(type);
+    const base = game.market.market_price?.[type] ?? market_base_price(type);
 
     const p = entry.last ?? base;
 
     // Tune per weed
-    const vol = {
-        basic: 0.03,
-        california: 0.05,
-        special: 0.08,
-    }[type] ?? 0.04;
+    const vol = volatility[type] ?? 0.04;
 
-    const mean_revert = {
-        basic: 0.02,
-        california: 0.02,
-        special: 0.02,
-    }[type] ?? 0.02;
+    const mean_revert = mean_revert_mult[type] ?? 0.02;
 
     // noise ~ [-1, +1]
     const noise = (Math.random() * 2 - 1);
@@ -114,7 +118,7 @@ function market_next_price(type) {
     return next;
 }
 
-// Called from your main tick(dt)
+// Called from main tick(dt)
 function market_tick(dt) {
     market_init_if_needed();
 

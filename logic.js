@@ -21,6 +21,11 @@ const game = {
             california: 0,
             special: 0,
         },
+        lifetime_weed_collected: {
+            basic: 0,
+            california: 0,
+            special: 0,
+        },
     },
     market: {
         // keep this small + serializable (safe for future saving)
@@ -33,8 +38,22 @@ const game = {
             california: { last: 5,  history: [] },
             special:    { last: 25, history: [] },
         },
+
+        market_price: {
+            basic: 1,
+            california: 5,
+            special: 25,
+        },
     },
 };
+
+let sell_quantity = 1;
+let market_quantity = {
+    basic: 1,
+    california: 1,
+    special: 1,
+}
+let market_fee = 0.02;
 
 function checkpoint_market() {
     return game.stats.lifetime_money_earned >= 10000;
@@ -44,7 +63,7 @@ function checkpoint_leverage() {
     return game.stats.lifetime_money_earned >= 100000;
 }
 
-let sell_quantity = 1;
+
 
 function get_cost(type) {
     const w = weeds[type];
@@ -79,6 +98,41 @@ function sell_max_weed(type) {
     }
 }
 
+function get_weed_market_price(type) {
+    return game.market.prices[type]?.last ?? market_base_price(type);
+}
+
+function get_weed_market_buy_price(type) {
+    const market_price = get_weed_market_price(type);
+    return market_price * (1 + market_fee) * market_quantity[type];
+}
+
+function market_buy_weed(type) {
+    const price = get_weed_market_buy_price(type);
+    if (game.money >= price) {
+        game.money -= price;
+        game.weed_owned[type] += market_quantity[type];
+        game.stats.lifetime_weed_collected[type] += market_quantity[type];
+    }
+}
+
+function get_weed_market_sell_price(type, quantity = market_quantity[type]) {
+    const market_price = get_weed_market_price(type);
+    return market_price * (1 - market_fee) * quantity;
+}
+
+function market_sell_weed(type, quantity = market_quantity[type]) {
+    const price = get_weed_market_sell_price(type);
+    if (game.weed_owned[type] >= quantity) {
+        game.weed_owned[type] -= quantity;
+        game.money += price * quantity;
+        game.stats.lifetime_money_earned += price * quantity;
+        game.stats.lifetime_weed_sold[type] += quantity;
+    }
+}
+
+
+
 function weed_income(type, seconds) {
     return weeds[type].income * game.plants_owned[type] * seconds;
 }
@@ -108,7 +162,9 @@ function check_unlocks() {
 
 function tick(dt) {
     for (const type in weeds) {
-        game.weed_owned[type] += weed_income(type, dt);
+        const income = weed_income(type, dt);
+        game.weed_owned[type] += income;
+        game.stats.lifetime_weed_collected[type] += income;
     }
 
     check_unlocks();
