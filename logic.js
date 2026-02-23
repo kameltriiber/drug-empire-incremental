@@ -1,4 +1,4 @@
-const game = {
+let game = {
     money: 10,
     plants_owned: {
         basic: 0,

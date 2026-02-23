@@ -11,9 +11,17 @@ function loop() {
     requestAnimationFrame(loop);
 }
 
+const loaded = load_game();
+if (loaded) game = loaded;
+
+market_init_if_needed();
+
 build_base_ui();
 
-//show_market();
+if (game.unlocks.market) show_market();
+if (game.unlocks.leverage) show_leverage();
+
+setup_autosave(); // optional
 
 update_screen();
 loop();
