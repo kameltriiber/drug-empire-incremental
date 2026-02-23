@@ -8,10 +8,16 @@ const volatility = {
     };
 
 const mean_revert_mult = {
-        basic: 0.02,
+        basic: 0.01,
         california: 0.02,
-        special: 0.02,
-    }
+        special: 0.03,
+    };
+
+const mean_revert2 = {
+        basic: 0.05,
+        california: 0.25,
+        special: 1.25,
+    };
 
 function now_sec() {
     return Math.floor(Date.now() / 1000);
@@ -99,15 +105,27 @@ function market_next_price(type) {
     const vol = volatility[type] ?? 0.04;
 
     const mean_revert = mean_revert_mult[type] ?? 0.02;
+    const mean_revert_2 = mean_revert2[type];
 
     // noise ~ [-1, +1]
     const noise = (Math.random() * 2 - 1);
 
     // mean reversion toward base + random shock
     const drift = (base - p) * mean_revert;
+
+    let drift2 = 0;
+    const delta = base - p;
+    if (delta > 0.5 * base) {
+        drift2 = mean_revert_2;
+    } else if (delta < -0.5 * base) {
+        drift2 = -mean_revert_2;
+    } else {
+        drift2 = 0;
+    }
+
     const shock = p * vol * noise;
 
-    let next = p + drift + shock;
+    let next = p + drift2 + shock;
 
     // Don't allow 0 or negative prices
     next = clamp(next, 0.05, Infinity);

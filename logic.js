@@ -122,11 +122,11 @@ function get_weed_market_sell_price(type, quantity = market_quantity[type]) {
 }
 
 function market_sell_weed(type, quantity = market_quantity[type]) {
-    const price = get_weed_market_sell_price(type);
+    const price = get_weed_market_sell_price(type, quantity);
     if (game.weed_owned[type] >= quantity) {
         game.weed_owned[type] -= quantity;
-        game.money += price * quantity;
-        game.stats.lifetime_money_earned += price * quantity;
+        game.money += price;
+        game.stats.lifetime_money_earned += price;
         game.stats.lifetime_weed_sold[type] += quantity;
     }
 }
