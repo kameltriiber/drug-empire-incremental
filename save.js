@@ -118,7 +118,10 @@
             const entry = g.market?.prices?.[t];
             const last = num(entry?.last, payload.game.market.prices[t].last);
             payload.game.market.prices[t].last = last;
-            payload.game.market.market_price[t] = last;
+            payload.game.market.market_price[t] = num(
+                g.market?.market_price?.[t],
+                (typeof market_base_price === "function") ? market_base_price(t) : payload.game.market.market_price[t]
+            );
 
             // History can be a little large; keep it bounded.
             if (MARKET_HISTORY_SAVE_LIMIT > 0 && Array.isArray(entry?.history)) {
@@ -210,7 +213,10 @@
                     base.market.prices[t] = { last: baseP, history: [] };
                 }
                 if (!base.market.market_price) base.market.market_price = {};
-                base.market.market_price[t] = num(base.market.prices[t].last, base.market.market_price[t] ?? 1);
+                // Baseline market prices are the static "basic prices", not the current live price.
+                base.market.market_price[t] = (typeof market_base_price === "function")
+                    ? market_base_price(t)
+                    : num(base.market.market_price[t], 1);
             }
 
             // Reset accumulator (avoid huge dt loops after load)
