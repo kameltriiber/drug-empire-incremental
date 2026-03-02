@@ -2,22 +2,22 @@
 // Owns ALL market state + price algorithm. UI is optional.
 
 const volatility = {
-        basic: 0.1,
-        california: 0.05,
-        special: 0.03,
-    };
+    basic: 0.1,
+    california: 0.05,
+    special: 0.03,
+};
 
 const mean_revert_mult = {
-        basic: 0.01,
-        california: 0.02,
-        special: 0.03,
-    };
+    basic: 0.01,
+    california: 0.02,
+    special: 0.03,
+};
 
 const mean_revert2 = {
-        basic: 0.05,
-        california: 0.25,
-        special: 1.25,
-    };
+    basic: 0.05,
+    california: 0.25,
+    special: 1.25,
+};
 
 function now_sec() {
     return Math.floor(Date.now() / 1000);
@@ -134,6 +134,66 @@ function market_next_price(type) {
     next = Math.round(next * 100) / 100;
 
     return next;
+}
+
+
+
+let market_bot_setprice_timer = {
+    basic: 0,
+    california: 0,
+    special: 0,
+}
+
+
+
+function market_trading_bot_setprice(type, price, time) {
+    market_bot_setprice_timer[type] = time;
+    game.market.market_price[type] = price;
+}
+
+function market_trading_bot_push(type) {
+    if (game.market.bots[type].number <= 0) return;
+    if (game.market.bots[type].cooldown > 0) return;
+    game.market.bots[type].cooldown = 120;
+
+    const number = game.market.bots[type].number;
+    const level = game.market.bots[type].level;
+    const current_price = game.market.prices[type].last;
+    const base_price = market_base_price(type);
+
+    // number of bots indicate push_price target price
+    // level indicates amount of time
+
+    const time = (level + 1) * 5;
+    const target_price = current_price * 2 + base_price * number;
+    market_trading_bot_setprice(type, target_price, time);
+}
+
+
+
+function bot_tick(dt) {
+    for (const type in game.market.bots) {
+        // cooldowns / timers
+        if (market_bot_setprice_timer[type] > 0) {
+            if (market_bot_setprice_timer[type] - dt < 0) {
+                market_bot_setprice_timer[type] = 0;
+            } else {
+                market_bot_setprice_timer[type] -= dt;
+            }
+        }
+        if (game.market.bots[type].cooldown > 0) {
+            if (game.market.bots[type].cooldown - dt < 0) {
+                game.market.bots[type].cooldown = 0;
+            } else {
+                game.market.bots[type].cooldown -= dt;
+            }
+        }
+
+        // reset market_price if timer is 0
+        if (market_bot_setprice_timer[type] === 0) {
+            game.market.market_price[type] = weeds[type].price;
+        }
+    }
 }
 
 // Called from main tick(dt)

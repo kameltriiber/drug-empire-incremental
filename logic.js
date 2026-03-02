@@ -34,15 +34,21 @@ let game = {
         tick_accum: 0,        // internal accumulator for timing
 
         prices: {
-            basic:      { last: 1,  history: [] },
-            california: { last: 5,  history: [] },
-            special:    { last: 25, history: [] },
+            basic: { last: 1, history: [] },
+            california: { last: 5, history: [] },
+            special: { last: 25, history: [] },
         },
 
         market_price: {
             basic: 1,
             california: 5,
             special: 25,
+        },
+
+        bots: {
+            basic: { number: 0, level: 1, cooldown: 120 },
+            california: { number: 0, level: 1, cooldown: 120 },
+            special: { number: 0, level: 1, cooldown: 120 },
         },
     },
 };
@@ -133,6 +139,24 @@ function market_sell_weed(type, quantity = market_quantity[type]) {
 
 
 
+function get_market_trading_bot_price(type) {
+    const botquantity = game.market.bots[type].number;
+    return weeds[type].price * 100000 * Math.pow(botquantity + 1, 2);
+}
+
+function buy_market_trading_bot(type) {
+    const botquantity = game.market.bots[type].number;
+    if (botquantity >= 10) return;
+    const price = get_market_trading_bot_price(type);
+    if (game.money >= price) {
+        game.money -= price;
+        game.market.bots[type].number++;
+    }
+}
+
+
+
+
 function weed_income(type, seconds) {
     return weeds[type].income * game.plants_owned[type] * seconds;
 }
@@ -170,5 +194,6 @@ function tick(dt) {
     check_unlocks();
 
     market_tick(dt);
+    bot_tick(dt);
 
 }

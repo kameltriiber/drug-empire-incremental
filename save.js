@@ -49,6 +49,7 @@
         const lifetime_collected = {};
         const market_prices = {};
         const market_price = {};
+        const bots = {};
 
         for (const t of types) {
             plants_owned[t] = 0;
@@ -59,6 +60,7 @@
             const base = (typeof market_base_price === "function") ? market_base_price(t) : (weeds?.[t]?.price ?? 1);
             market_prices[t] = { last: base, history: [] };
             market_price[t] = base;
+            bots[t] = { number: 0, level: 1, cooldown: 120 };
         }
 
         return {
@@ -77,6 +79,7 @@
                 tick_accum: 0, // reset on load
                 prices: market_prices,
                 market_price,
+                bots,
             },
         };
     }
@@ -123,6 +126,16 @@
                 (typeof market_base_price === "function") ? market_base_price(t) : payload.game.market.market_price[t]
             );
 
+            if (g.market?.bots?.[t]) {
+                payload.game.market.bots[t] = {
+                    number: int(g.market.bots[t].number, 0),
+                    level: int(g.market.bots[t].level, 1),
+                    cooldown: num(g.market.bots[t].cooldown, 60),
+                };
+            } else {
+                payload.game.market.bots[t] = { number: 0, level: 1, cooldown: 60 };
+            }
+
             // History can be a little large; keep it bounded.
             if (MARKET_HISTORY_SAVE_LIMIT > 0 && Array.isArray(entry?.history)) {
                 const hist = entry.history;
@@ -153,16 +166,16 @@
     }
 
     function save_game() {
-    if (saving_disabled) return false;
-    try {
-        const payload = build_save_payload();
-        localStorage.setItem(SAVE_KEY, JSON.stringify(payload));
-        return true;
-    } catch (e) {
-        console.warn("save_game failed:", e);
-        return false;
+        if (saving_disabled) return false;
+        try {
+            const payload = build_save_payload();
+            localStorage.setItem(SAVE_KEY, JSON.stringify(payload));
+            return true;
+        } catch (e) {
+            console.warn("save_game failed:", e);
+            return false;
+        }
     }
-}
 
     // Merge SOURCE into TARGET recursively (mutates target). Arrays are replaced.
     function deepMergeInto(target, source) {
@@ -217,6 +230,11 @@
                 base.market.market_price[t] = (typeof market_base_price === "function")
                     ? market_base_price(t)
                     : num(base.market.market_price[t], 1);
+
+                if (!base.market.bots) base.market.bots = {};
+                if (!base.market.bots[t]) {
+                    base.market.bots[t] = { number: 0, level: 1, cooldown: 60 };
+                }
             }
 
             // Reset accumulator (avoid huge dt loops after load)
