@@ -19,6 +19,12 @@ const mean_revert2 = {
     special: 1.25,
 };
 
+const mean_revert2_backup = {
+    basic: 0.05,
+    california: 0.25,
+    special: 1.25,
+};
+
 function now_sec() {
     return Math.floor(Date.now() / 1000);
 }
@@ -144,6 +150,12 @@ let market_bot_setprice_timer = {
     special: 0,
 }
 
+let market_bot_after_crash_timer = {
+    basic: 0,
+    california: 0,
+    special: 0,
+}
+
 
 
 function market_trading_bot_setprice(type, price, time) {
@@ -156,6 +168,14 @@ function market_trading_bot_push(type) {
     if (game.market.bots[type].cooldown > 0) return;
     game.market.bots[type].cooldown = 120;
 
+    // crash chance in level %
+    const random = Math.random();
+    if (random < (game.market.bots[type].level / 100)) {
+        market_trading_bot_crash(type);
+        game.market.bots[type].cooldown = 240;
+        return;
+    }
+
     const number = game.market.bots[type].number;
     const level = game.market.bots[type].level;
     const current_price = game.market.prices[type].last;
@@ -167,6 +187,12 @@ function market_trading_bot_push(type) {
     const time = (level + 1) * 5;
     const target_price = current_price * 2 + base_price * number;
     market_trading_bot_setprice(type, target_price, time);
+}
+
+function market_trading_bot_crash(type) {
+    game.market.prices[type].last = 0;
+    market_bot_after_crash_timer[type] = 10;
+    mean_revert2[type] = mean_revert2_backup[type] * 5;
 }
 
 
@@ -188,10 +214,20 @@ function bot_tick(dt) {
                 game.market.bots[type].cooldown -= dt;
             }
         }
+        if (market_bot_after_crash_timer[type] > 0) {
+            if (market_bot_after_crash_timer[type] - dt < 0) {
+                market_bot_after_crash_timer[type] = 0;
+            } else {
+                market_bot_after_crash_timer[type] -= dt;
+            }
+        }
 
         // reset market_price if timer is 0
         if (market_bot_setprice_timer[type] === 0) {
             game.market.market_price[type] = weeds[type].price;
+        }
+        if (market_bot_after_crash_timer[type] === 0) {
+            mean_revert2[type] = mean_revert2_backup[type];
         }
     }
 }

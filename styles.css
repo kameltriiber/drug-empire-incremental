@@ -211,9 +211,12 @@ button:active {
     margin-top: 0;
 }
 
-.market_weed_counter {
-    width: 300px;
+.market_weed_counter, .market_bot_counter {
+    font-size: 20px;
+    font-weight: 600;
+    width: 125px;
     text-align: center;
+    align-content: center;
     margin: 0;
     border-radius: 10px;
 }

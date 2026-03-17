@@ -154,6 +154,19 @@ function buy_market_trading_bot(type) {
     }
 }
 
+function get_market_trading_bot_upgrade_price(type) {
+    const botlevel = game.market.bots[type].level;
+    return weeds[type].price * 100000 * botlevel * 10;
+}
+
+function buy_market_trading_bot_upgrade(type) {
+    const price = get_market_trading_bot_upgrade_price(type);
+    if (game.money >= price) {
+        game.money -= price;
+        game.market.bots[type].level++;
+    }
+}
+
 
 
 

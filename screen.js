@@ -6,6 +6,7 @@ const ui = {
     market_div: null,
     market_weed_counter_div: null,
     market_weed_counter: {},
+    market_bot_counter: {},
     market_chart_basic_div: null,
     market_chart_elements: {},
     market_charts: {},
@@ -250,8 +251,14 @@ function add_market_chart(type) {
     counter.classList.add("market_weed_counter");
     counter.classList.add("level2");
 
+    const bot_counter = document.createElement("div");
+    bot_counter.classList.add("market_bot_counter");
+    bot_counter.classList.add("level2");
+
     ui.market_weed_counter[type] = counter;
+    ui.market_bot_counter[type] = bot_counter;
     row1.append(counter);
+    row1.append(bot_counter);
     graph_control_div.append(row1);
 
     const row2 = document.createElement("div");
@@ -446,7 +453,15 @@ function update_market_weed_counter() {
     for (const type in ui.market_weed_counter) {
         const weed_owned = Math.floor(game.weed_owned[type]);
         const typeCapitalized = type.charAt(0).toUpperCase() + type.slice(1);
-        ui.market_weed_counter[type].textContent = `${typeCapitalized} Weed: ${format_number(weed_owned)}`;
+        ui.market_weed_counter[type].textContent = `${typeCapitalized} Weed: \r\n${format_number(weed_owned)}`;
+    }
+}
+
+function update_market_bot_counter() {
+    for (const type in ui.market_bot_counter) {
+        const bot_owned = Math.floor(game.market.bots[type].number);
+        const typeCapitalized = type.charAt(0).toUpperCase() + type.slice(1);
+        ui.market_bot_counter[type].textContent = `${typeCapitalized} Bots: \r\n${format_number(bot_owned)}`;
     }
 }
 
@@ -473,6 +488,7 @@ function update_screen() {
     update_weed_cards();
 
     update_market_weed_counter();
+    update_market_bot_counter();
 
     update_market_chart_buttons("basic");
     update_market_chart_buttons("california");
